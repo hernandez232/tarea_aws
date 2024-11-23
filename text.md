@@ -1,0 +1,1 @@
+stage('Checkout') { steps { git url: 'https://github.com/hernandez232/tarea_aws.git', branch: 'master' } }
