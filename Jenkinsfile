@@ -3,23 +3,34 @@ pipeline {
     triggers {
         githubPush()
     }
+    enviroment{
+        BUCKET = "awsbucketubuntu"
+    }
+    stages ('deploy to S3') {
+        steps {
+            withAWS(credentials: 'aws_ubuntu', region: 'us-east-2'){
+                sh 'aws s3 sync . s3://$BUCKET --exclude ".git/*"'
+                sh 'aws s3 ls s3://BUCKET'
+            }
+        }
+    }
     stages {
-        stage('init') {
+        stages('init') {
             steps {
                 sh 'npm install'
             }
         }
-        stage('unit Tests') {
+        stages('unit Tests') {
             steps {
                 sh 'npm run test:unit'
             }
         }
-        stage('integration Tests') {
+        stages('integration Tests') {
             steps {
                 sh 'npm run test:integration'
             }
         }
-        stage('Start app') {
+        stages('Start app') {
             steps {
                 script {
                     sh 'npm start'
