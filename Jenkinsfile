@@ -4,26 +4,19 @@ pipeline {
         githubPush()
     }
     stages {
-        stage('Checkout') {
+        stage('init') {
             steps {
-                script {
-                    sh 'git reset --hard'
-                    sh "git pull origin main"
-                }
+                sh 'npm install'
             }
         }
-        stage('Run Unit Tests') {
+        stage('unit Tests') {
             steps {
-                script {
-                    sh 'npm run test:unit'
-                }
+                sh 'npm run test:unit'
             }
         }
-        stage('Run Integration Tests') {
+        stage('integration Tests') {
             steps {
-                script {
-                    sh 'npm run test:integration'
-                }
+                sh 'npm run test:integration'
             }
         }
         stage('Start app') {
@@ -35,3 +28,11 @@ pipeline {
         }
     }
 }
+
+/*
+stage('build') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+*/
