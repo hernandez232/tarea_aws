@@ -30,28 +30,21 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    sh '''
-                    docker run --rm -v $(pwd):/app -w /app node:18-alpine sh -c "npm install --legacy-peer-deps"
-
-                    '''
+                    sh 'npm install --legacy-peer-deps'
                 }
             }
         }
         stage('Run Unit Tests') {
             steps {
                 script {
-                    sh '''
-                    docker run --rm -v $(pwd):/app -w /app node:18-alpine sh -c "npm run test:unit"
-                    '''
+                    sh 'npm run test:unit'
                 }
             }
         }
         stage('Run Integration Tests') {
             steps {
                 script {
-                    sh '''
-                    docker run --rm -v $(pwd):/app -w /app node:18-alpine sh -c "npm run test:integration"
-                    '''
+                    sh 'npm run test:integration'
                 }
             }
         }
