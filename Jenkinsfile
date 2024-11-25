@@ -1,10 +1,5 @@
 pipeline {
-    //agent any
-    agent {
-        docker {
-            image 'node:18-alpine'
-        }
-    }
+    agent any
     triggers {
         githubPush()
     }
@@ -15,16 +10,6 @@ pipeline {
                     sh 'git reset --hard'
                     sh "git pull origin main"
                 }
-            }
-        }
-        stage('Clean Workspace') {
-            steps {
-                sh 'rm -rf node_modules package-lock.json'
-            }
-        }
-        stage('Update npm') {
-            steps {
-                sh 'npm install -g npm@latest'
             }
         }
         stage('Install Dependencies') {
