@@ -12,11 +12,6 @@ pipeline {
                 }
             }
         }
-        stage('Clean Workspace') {
-            steps {
-                sh 'rm -rf node_modules package-lock.json'
-            }
-        }
         stage('Install Dependencies') {
             steps {
                 script {
