@@ -22,7 +22,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    sh 'npm install'
+                    sh 'npm install --save-dev jest @testing-library/react @testing-library/jest-dom'
                 }
             }
         }
@@ -37,6 +37,13 @@ pipeline {
             steps {
                 script {
                     sh 'npm run test:integration'
+                }
+            }
+        }
+        stages('Start app') {
+            steps {
+                script {
+                    sh 'npm start'
                 }
             }
         }
