@@ -3,6 +3,11 @@ pipeline {
     triggers {
         githubPush()
     }
+    agent {
+        docker {
+            image 'node:18-alpine'
+        }
+    }
     stages {
         stage('Checkout') {
             steps {
@@ -12,11 +17,22 @@ pipeline {
                 }
             }
         }
+        stage('Clean Workspace') {
+            steps {
+                sh 'rm -rf node_modules package-lock.json'
+            }
+        }
+        stage('Update npm') {
+            steps {
+                sh 'npm install -g npm@latest'
+            }
+        }
         stage('Install Dependencies') {
             steps {
                 script {
                     sh '''
-                    docker run --rm -v $PWD:/app -w /app node:16-alpine sh -c "npm install --legacy-peer-deps"
+                    docker run --rm -v $(pwd):/app -w /app node:18-alpine sh -c "npm install --legacy-peer-deps"
+
                     '''
                 }
             }
@@ -25,7 +41,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    docker run --rm -v $PWD:/app -w /app node:16-alpine sh -c "npm run test:unit"
+                    docker run --rm -v $(pwd):/app -w /app node:18-alpine sh -c "npm run test:unit"
                     '''
                 }
             }
@@ -34,7 +50,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    docker run --rm -v $PWD:/app -w /app node:16-alpine sh -c "npm run test:integration"
+                    docker run --rm -v $(pwd):/app -w /app node:18-alpine sh -c "npm run test:integration"
                     '''
                 }
             }
