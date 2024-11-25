@@ -1,12 +1,12 @@
 pipeline {
-    agent any
-    triggers {
-        githubPush()
-    }
+    //agent any
     agent {
         docker {
             image 'node:18-alpine'
         }
+    }
+    triggers {
+        githubPush()
     }
     stages {
         stage('Checkout') {
