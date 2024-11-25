@@ -6,10 +6,6 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                script {
-                    sh 'git reset --hard'
-                    sh "git pull origin main"
-                }
 		        script {
                     sh 'git reset --hard'
                     def gitUrl = 'https://github.com/hernandez232/tarea_aws.git'
@@ -40,7 +36,7 @@ pipeline {
                 }
             }
         }
-        stages('Start app') {
+        stage('Start app') {
             steps {
                 script {
                     sh 'npm start'
