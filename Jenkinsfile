@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:16-alpine'
+            args '-u root:root'
+        }
+    }
     triggers {
         githubPush()
     }
@@ -12,15 +17,15 @@ pipeline {
                 }
             }
         }
-        stage('Clean Workspace') {
+        stage('Prepare Workspace') {
             steps {
-                sh 'rm -rf node_modules package-lock.json'
+                sh 'mkdir -p /var/lib/jenkins/workspace/pipeline-react'
             }
         }
         stage('Install Dependencies') {
             steps {
                 script {
-                    sh 'npm install --legacy-peer-deps'
+                    sh 'npm install'
                 }
             }
         }

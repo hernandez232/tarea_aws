@@ -1,20 +1,18 @@
-# Use a lightweight Node image to build the app
-FROM node:16-alpine AS build
+# Usa la imagen base de Node.js
+FROM node:16-alpine
 
-# Create app directory
+# Establece el directorio de trabajo
 WORKDIR /app
 
-# Install dependencies
+# Copia los archivos del proyecto
 COPY package*.json ./
+COPY . .
+
+# Instala dependencias
 RUN npm install --legacy-peer-deps
 
-# Copy and build the app
-COPY . .
-RUN npm run build
+# Expone el puerto de la aplicación
+EXPOSE 3000
 
-# Use an Nginx image to serve the app
-FROM nginx:alpine
-COPY --from=build /app/build /usr/share/nginx/html
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+# Comando para iniciar la aplicación
+CMD ["npm", "start"]
