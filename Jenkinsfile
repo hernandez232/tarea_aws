@@ -16,6 +16,9 @@ pipeline {
             steps {
                 script {
                     sh '''
+                    docker run --rm -v /var/lib/jenkins/workspace/pipeline-react:/app -w /app node:16-alpine sh -c "rm -rf node_modules && npm cache clean --force"
+                    '''
+                    sh '''
                     docker run --rm -v $PWD:/app -w /app node:16-alpine sh -c "npm install --legacy-peer-deps"
                     '''
                 }
