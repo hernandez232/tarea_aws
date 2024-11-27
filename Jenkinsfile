@@ -8,7 +8,7 @@ pipeline {
             steps {
                 script {
                     sh 'git reset --hard'
-                    sh "git pull origin master"
+                    sh "git pull origin main"
                 }
             }
         }
