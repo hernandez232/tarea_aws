@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:16-alpine'
-            args '-u root:root'
-        }
-    }
+    agent any
     triggers {
         githubPush()
     }
@@ -13,33 +8,36 @@ pipeline {
             steps {
                 script {
                     sh 'git reset --hard'
-                    sh "git pull origin main"
+                    sh "git pull origin master"
                 }
-            }
-        }
-        stage('Prepare Workspace') {
-            steps {
-                sh 'mkdir -p /var/lib/jenkins/workspace/pipeline-react'
             }
         }
         stage('Install Dependencies') {
             steps {
                 script {
-                    sh 'npm install'
+                    sh 'sudo apt install docker.io -y'
+                    sh 'sudo usermod -aG docker jenkins'
+                    sh '''
+                    docker run --rm -v $PWD:/app -w /app node:16-alpine sh -c "npm install --legacy-peer-deps"
+                    '''
                 }
             }
         }
         stage('Run Unit Tests') {
             steps {
                 script {
-                    sh 'npm run test:unit'
+                    sh '''
+                    docker run --rm -v $PWD:/app -w /app node:16-alpine sh -c "npm run test:unit"
+                    '''
                 }
             }
         }
         stage('Run Integration Tests') {
             steps {
                 script {
-                    sh 'npm run test:integration'
+                    sh '''
+                    docker run --rm -v $PWD:/app -w /app node:16-alpine sh -c "npm run test:integration"
+                    '''
                 }
             }
         }
