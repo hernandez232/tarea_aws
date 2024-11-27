@@ -15,10 +15,8 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    sh 'sudo apt install docker.io -y'
-                    sh 'sudo usermod -aG docker jenkins'
                     sh '''
-                    docker run --rm -v $PWD:/app -w /app node:16-alpine sh -c "npm install --legacy-peer-deps"
+                    sudo docker run --rm -v $PWD:/app -w /app node:16-alpine sh -c "npm install --legacy-peer-deps"
                     '''
                 }
             }
@@ -27,7 +25,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    docker run --rm -v $PWD:/app -w /app node:16-alpine sh -c "npm run test:unit"
+                    sudo docker run --rm -v $PWD:/app -w /app node:16-alpine sh -c "npm run test:unit"
                     '''
                 }
             }
@@ -36,7 +34,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    docker run --rm -v $PWD:/app -w /app node:16-alpine sh -c "npm run test:integration"
+                    sudo docker run --rm -v $PWD:/app -w /app node:16-alpine sh -c "npm run test:integration"
                     '''
                 }
             }
@@ -44,7 +42,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t my-react-app .'
+                    sh 'sudo docker build -t my-react-app .'
                 }
             }
         }
